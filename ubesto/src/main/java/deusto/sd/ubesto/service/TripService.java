@@ -1,5 +1,8 @@
 package deusto.sd.ubesto.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -167,5 +170,19 @@ public class TripService {
 
         // Redondear a 2 decimales
         return Math.round(price * 100.0) / 100.0;
+    }
+
+    public List<Trip> getAllTrips(){
+        return  tripRepository.findAll();
+    }
+
+    public List<String> fromTripToString(List<Trip> allTrips){
+        List<String> list_strings = new ArrayList<>();
+        for(Trip t1 :allTrips){
+            String s1=+t1.getId()+ "__("+t1.getPosicionOrigen().getLongitud()+", "+t1.getPosicionOrigen().getLatitud()+")__("+
+            t1.getPosicionDestino().getLongitud()+", "+t1.getPosicionDestino().getLatitud()+")__"+t1.getPrecio();
+            list_strings.add(s1);
+        }
+        return list_strings;
     }
 }

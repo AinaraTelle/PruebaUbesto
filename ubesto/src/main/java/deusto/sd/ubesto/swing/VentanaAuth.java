@@ -1,6 +1,8 @@
 package deusto.sd.ubesto.swing;
 
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import java.awt.*;
@@ -11,24 +13,26 @@ import java.net.http.HttpResponse;
 
 public class VentanaAuth extends JFrame {
      private String rol;
-    final Color verdeFondo = new Color(224, 250, 228);
-    final LineBorder bordeBerde = new LineBorder(new Color(47,158,68),2,true);
-    final Color verdeBoton =new Color(79,201,95); // Color verde estilo boceto: Color(100, 200, 100)
-    final Font fontBotones = new Font("SansSerif", Font.BOLD, 12);
-
+    final Color fondoClarito_verde = new Color(224, 250, 228);
+    final LineBorder btnNormalBorde = new LineBorder(new Color(47,158,68),2,true);
+    final Color btnNormalVerde =new Color(79,201,95); // Color verde estilo boceto: Color(100, 200, 100)
+    final Font fontBtnNormal = new Font("SansSerif", Font.BOLD, 12);
+    final Color btnSalirFont = new Color(47, 158, 68);
+    final LineBorder btnSalirBorde = new LineBorder(new Color(47,158,68),2,true);
+    final EmptyBorder paddingBtnAtras =  new EmptyBorder(5, 10, 5, 10);
+   
     public VentanaAuth(String rol) {
         this.rol = rol;
         setTitle("Autenticación - " + rol);
         setSize(500, 500);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        // setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         setLayout(new BorderLayout());
-        setBackground(verdeFondo);
+        setBackground(fondoClarito_verde);
 
         JPanel panelMain = new JPanel();
         panelMain.setLayout(new BoxLayout(panelMain, BoxLayout.Y_AXIS));
-        panelMain.setBackground(verdeFondo);
+        panelMain.setBackground(fondoClarito_verde);
 
         // --- SECCIÓN REGISTRO ---
         JPanel panelRegistro = new JPanel(new GridLayout(0, 2, 5, 5));
@@ -41,7 +45,7 @@ public class VentanaAuth extends JFrame {
         panelRegistro.add(new JLabel("User name:")); panelRegistro.add(txtRegNombre);
         panelRegistro.add(new JLabel("Email:")); panelRegistro.add(txtRegEmail);
         panelRegistro.add(new JLabel("Password:")); panelRegistro.add(txtRegPass);
-        panelRegistro.setBackground(verdeFondo);
+        panelRegistro.setBackground(fondoClarito_verde);
         
         // Campos extra para conductor
         JTextField txtLicencia = new JTextField();
@@ -50,10 +54,10 @@ public class VentanaAuth extends JFrame {
         }
 
         JButton btnRegister = new JButton("REGISTER");
-        btnRegister.setBackground(verdeBoton);
+        btnRegister.setBackground(btnNormalVerde);
         btnRegister.setForeground(Color.white);
-        btnRegister.setFont(fontBotones);
-        btnRegister.setBorder(bordeBerde);
+        btnRegister.setFont(fontBtnNormal);
+        btnRegister.setBorder(btnNormalBorde);
 
         panelRegistro.add(new JLabel("")); 
         panelRegistro.add(btnRegister);
@@ -69,23 +73,27 @@ public class VentanaAuth extends JFrame {
         panelLogin.add(new JLabel("Password:")); panelLogin.add(txtLogPass);
         
         JButton btnLogin = new JButton("LOGIN");
-        btnLogin.setBackground(new Color(100, 200, 100));
         panelLogin.add(new JLabel("")); 
         panelLogin.add(btnLogin);
-        panelLogin.setBackground(verdeFondo);
+        panelLogin.setBackground(fondoClarito_verde);
         
-        btnLogin.setBackground(verdeBoton);
+        btnLogin.setBackground(btnNormalVerde);
         btnLogin.setForeground(Color.white);
-        btnLogin.setFont(fontBotones);
-        btnLogin.setBorder(bordeBerde);
+        btnLogin.setFont(fontBtnNormal);
+        btnLogin.setBorder(btnNormalBorde);
 
         // --- SECCIÓN ATRAS ---
         JPanel panelAtras = new JPanel();
         JButton btnAtras = new JButton("Atras");
+
+        btnAtras.setBorder(new CompoundBorder(btnSalirBorde, paddingBtnAtras));
+        btnAtras.setForeground(btnSalirFont);
+        btnAtras.setBackground(Color.white);
+
         panelAtras.setLayout(new BorderLayout());
 
         panelAtras.add(btnAtras,BorderLayout.WEST);
-        panelAtras.setBackground(verdeFondo);
+        panelAtras.setBackground(fondoClarito_verde);
 
         // --- EVENTOS ---
         
@@ -183,6 +191,7 @@ public class VentanaAuth extends JFrame {
             }
         });
 
+        // EVENTO: IR ASTRÁS
         btnAtras.addActionListener(e ->{
             try {
                 new VentanaPrincipal().setVisible(true);
@@ -192,8 +201,8 @@ public class VentanaAuth extends JFrame {
             }
         });
 
-        add(panelMain, BorderLayout.CENTER);
 
+        add(panelMain, BorderLayout.CENTER);
         panelMain.add(panelRegistro);
         panelMain.add(Box.createVerticalStrut(20)); 
         panelMain.add(panelLogin);
