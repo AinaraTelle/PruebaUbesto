@@ -12,7 +12,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class VentanaAuth extends JFrame {
-     private String rol;
+    private String rol;
     final Color fondoClarito_verde = new Color(224, 250, 228);
     final LineBorder btnNormalBorde = new LineBorder(new Color(47,158,68),2,true);
     final Color btnNormalVerde =new Color(79,201,95); // Color verde estilo boceto: Color(100, 200, 100)
