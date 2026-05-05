@@ -91,7 +91,6 @@ public class VentanaAuth extends JFrame {
         btnAtras.setBackground(Color.white);
 
         panelAtras.setLayout(new BorderLayout());
-
         panelAtras.add(btnAtras,BorderLayout.WEST);
         panelAtras.setBackground(fondoClarito_verde);
 

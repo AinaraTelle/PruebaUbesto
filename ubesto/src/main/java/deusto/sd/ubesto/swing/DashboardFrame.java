@@ -1,16 +1,22 @@
 package deusto.sd.ubesto.swing;
 
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import java.awt.*;
 
 public class DashboardFrame extends JFrame {
     final Dimension d = new Dimension(150, 180);
-    final Color verdeFondo = new Color(224, 250, 228);
-    final LineBorder bordeBerde = new LineBorder(new Color(47,158,68),2,true);
-    final Color colorBoton =new Color(79,201,95); // Color verde estilo boceto: Color(100, 200, 100)
-    final Font fontBotones = new Font("SansSerif", Font.BOLD, 12);
+    final Color fondoClarito_verde = new Color(224, 250, 228);
+    final LineBorder btnNormalBorde = new LineBorder(new Color(47,158,68),2,true);
+    final Color btnNormalVerde =new Color(79,201,95); // Color verde estilo boceto: Color(100, 200, 100)
+    final Font fontBtnNormal = new Font("SansSerif", Font.BOLD, 14);
+    final Color btnSalirFont = new Color(47, 158, 68);
+    final LineBorder btnSalirBorde = new LineBorder(new Color(47,158,68),2,true);
+    final EmptyBorder paddingBtnAtras =  new EmptyBorder(5, 10, 5, 10);
+
 
     // CORRECCIÓN 1: Añadimos Long idUsuario al constructor
     public DashboardFrame(String rol, String email, Long idUsuario) {
@@ -20,28 +26,42 @@ public class DashboardFrame extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
+
         // CORRECCIÓN 2: Mostramos el ID en el mensaje de bienvenida para comprobar que llega bien
         JLabel lblBienvenida = new JLabel("Bienvenido, [" + rol + "] " + email + " (ID: " + idUsuario + ")");
         lblBienvenida.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         add(lblBienvenida, BorderLayout.NORTH);
+        setBackground(fondoClarito_verde);
+        lblBienvenida.setOpaque(true);
+        lblBienvenida.setBackground(fondoClarito_verde);
 
-        String verbo="";
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        panelBotones.setBackground(fondoClarito_verde);
 
         // Si es pasajero, añadimos los botones del boceto
         if (rol.equals("PASAJERO")) {
-            JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
-            verbo="Solicitar";
+            
             JButton btnEditar = new JButton("Editar Datos");
-            JButton btnBuscar = new JButton(verbo + " Viaje");
-            JButton btnHistorial = new JButton("Ver historial de viajes");
+            JButton btnBuscar = new JButton( "Solicitar Viaje");
+            JButton btnHistorial = new JButton("Ver historial \n de viajes");
             
-            btnEditar.setBackground(colorBoton);
-            btnBuscar.setBackground(colorBoton);
-            btnHistorial.setBackground(colorBoton);
-            
+            btnEditar.setBackground(btnNormalVerde);
+            btnEditar.setFont(fontBtnNormal);
+            btnEditar.setForeground(Color.white);
             btnEditar.setPreferredSize(d);
+            btnEditar.setBorder(btnNormalBorde);//new CompoundBorder(btnNormalBorde, paddingBtnAtras)
+
+            btnBuscar.setBackground(btnNormalVerde);
+            btnBuscar.setFont(fontBtnNormal);
+            btnBuscar.setForeground(Color.white);
             btnBuscar.setPreferredSize(d);
+            btnBuscar.setBorder(btnNormalBorde);
+
+            btnHistorial.setBackground(btnNormalVerde);
+            btnHistorial.setFont(fontBtnNormal);
+            btnHistorial.setForeground(Color.white);
             btnHistorial.setPreferredSize(d);
+            btnHistorial.setBorder(btnNormalBorde);
 
             btnEditar.addActionListener(e -> {
                 new VentanaEditarPasajero(email, idUsuario).setVisible(true);
@@ -60,10 +80,15 @@ public class DashboardFrame extends JFrame {
             add(panelBotones, BorderLayout.CENTER);
             
         } else if (rol.equals("CONDUCTOR")) {
-            JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
+            // JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
+
             JButton btnEditar = new JButton("Editar Datos");
-            btnEditar.setBackground(colorBoton);
+            btnEditar.setBackground(btnNormalVerde);
             btnEditar.setPreferredSize(d);
+            btnEditar.setFont(fontBtnNormal);
+            btnEditar.setForeground(Color.white);
+
+
             btnEditar.addActionListener(e -> {
                 new VentanaEditarConductor(email, idUsuario).setVisible(true);
                 dispose();
@@ -98,14 +123,19 @@ public class DashboardFrame extends JFrame {
         }
 
         JPanel panelAtras = new JPanel(new BorderLayout());
-        JButton btonAtras = new JButton("Cerrar sesión");
+        panelAtras.setBackground(fondoClarito_verde);
+        JButton btnAtras = new JButton("Cerrar sesión");
 
-        btonAtras.addActionListener(e -> {
+        btnAtras.setBorder(new CompoundBorder(btnSalirBorde, paddingBtnAtras));
+        btnAtras.setForeground(btnSalirFont);
+        btnAtras.setBackground(Color.white);
+
+        btnAtras.addActionListener(e -> {
             new VentanaPrincipal().setVisible(true);
             dispose();
         });
 
         add(panelAtras,BorderLayout.SOUTH);
-        panelAtras.add(btonAtras,BorderLayout.WEST);
+        panelAtras.add(btnAtras,BorderLayout.WEST);
     }
 }

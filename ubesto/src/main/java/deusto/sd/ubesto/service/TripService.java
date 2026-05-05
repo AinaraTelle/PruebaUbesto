@@ -173,7 +173,15 @@ public class TripService {
     }
 
     public List<Trip> getAllTrips(){
-        return  tripRepository.findAll();
+        List<Trip> todosTrips=  tripRepository.findAll();
+        ArrayList<Trip> tripsSolicitados = new ArrayList<>();
+
+        for(Trip t1: todosTrips){
+            if(String.valueOf( t1.getEstado()) =="SOLICITADO"){
+                tripsSolicitados.add(t1);
+            }
+        }
+        return tripsSolicitados;
     }
 
     public List<String> fromTripToString(List<Trip> allTrips){
