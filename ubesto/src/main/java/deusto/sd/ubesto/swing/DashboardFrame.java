@@ -91,23 +91,22 @@ public class DashboardFrame extends JFrame {
             btnEditar.setPreferredSize(d);
             btnEditar.setFont(fontBtnNormal);
             btnEditar.setForeground(Color.white);
-
-
-            btnEditar.addActionListener(e -> {
-                new VentanaEditarConductor(email, idUsuario).setVisible(true);
-                dispose();
-            });
+            
             JButton btnVehiculo = new JButton("Añadir Vehículo");
+            btnVehiculo.setBackground(btnNormalVerde);
+            btnVehiculo.setPreferredSize(d);
+            btnVehiculo.setFont(fontBtnNormal);
+            btnVehiculo.setForeground(Color.white);
+            
             JButton btnViaje = new JButton("Realizar Viaje");
+            btnViaje.setBackground(btnNormalVerde);
+            btnViaje.setPreferredSize(d);
+            btnViaje.setFont(fontBtnNormal);
+            btnViaje.setForeground(Color.white);
             
-            Color colorBoton = new Color(100, 200, 100);
-            btnEditar.setBackground(colorBoton);
-            btnVehiculo.setBackground(colorBoton);
-            btnViaje.setBackground(colorBoton);
-            
-            btnEditar.setPreferredSize(d);
             btnVehiculo.setPreferredSize(d);
             btnViaje.setPreferredSize(d);
+            btnEditar.setPreferredSize(d);
 
             btnVehiculo.addActionListener(e -> {
                 new VentanaAñadirVehiculo(email, idUsuario).setVisible(true);
@@ -116,6 +115,11 @@ public class DashboardFrame extends JFrame {
             
             btnViaje.addActionListener(e -> {
                 new VentanaRealizarViaje(idUsuario, email).setVisible(true);
+                dispose();
+            });
+
+            btnEditar.addActionListener(e -> {
+                new VentanaEditarConductor(email, idUsuario).setVisible(true);
                 dispose();
             });
 
