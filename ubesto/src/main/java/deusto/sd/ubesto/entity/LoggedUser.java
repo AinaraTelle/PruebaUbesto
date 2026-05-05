@@ -15,21 +15,21 @@ public class LoggedUser {
     private Long id;
     @Column(name="type")
     private String user_type;
-    @Column(name="user_id")
-    private Long user_id;
+    @Column(name="userid")
+    private Long userid;
     @Column(name="token")
     private String token;
     
-    public LoggedUser(Long id, String user_type, Long user_id, String token) {
+    public LoggedUser(Long id, String user_type, Long userid, String token) {
         this.id = id;
         this.user_type = user_type;
-        this.user_id = user_id;
+        this.userid = userid;
         this.token = token;
     }
 
-    public LoggedUser( String user_type, Long user_id, String token) {
+    public LoggedUser( String user_type, Long userid, String token) {
         this.user_type = user_type;
-        this.user_id = user_id;
+        this.userid = userid;
         this.token = token;
     }
 
@@ -52,12 +52,12 @@ public class LoggedUser {
         this.user_type = user_type;
     }
 
-    public Long getUser_id() {
-        return user_id;
+    public Long getuserid() {
+        return userid;
     }
 
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
+    public void setuserid(Long userid) {
+        this.userid = userid;
     }
 
     public String getToken() {

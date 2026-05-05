@@ -104,4 +104,21 @@ public class DriverService {
             return null;
         }
     }
+
+    public boolean deleteDriver(Long id){
+        try {
+            loggedUserRepository.deleteByUserid(id);
+            Optional<LoggedUser> d1= loggedUserRepository.findByUserid(id);
+            if(!d1.isPresent()){
+                return true;
+            }else{
+                return false;
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            return false;
+        }
+        
+    }
 }

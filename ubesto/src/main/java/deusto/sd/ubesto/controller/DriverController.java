@@ -2,6 +2,7 @@ package deusto.sd.ubesto.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -66,6 +67,15 @@ public class DriverController {
         }
     }
 
+    @DeleteMapping("/logout/{id}")
+    public ResponseEntity<Boolean> deleteDriver(@PathVariable Long id) {
+        boolean borrado = driverService.deleteDriver(id);
+        if (borrado) {
+            return new ResponseEntity<>(borrado, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(borrado, HttpStatus.NOT_FOUND);
+        }
+    }
    
 
 

@@ -6,6 +6,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import java.awt.*;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 public class DashboardFrame extends JFrame {
     final Dimension d = new Dimension(150, 180);
@@ -124,18 +128,44 @@ public class DashboardFrame extends JFrame {
 
         JPanel panelAtras = new JPanel(new BorderLayout());
         panelAtras.setBackground(fondoClarito_verde);
-        JButton btnAtras = new JButton("Cerrar sesión");
+        JButton btnCerrarSesion = new JButton("Cerrar sesión");
 
-        btnAtras.setBorder(new CompoundBorder(btnSalirBorde, paddingBtnAtras));
-        btnAtras.setForeground(btnSalirFont);
-        btnAtras.setBackground(Color.white);
+        btnCerrarSesion .setBorder(new CompoundBorder(btnSalirBorde, paddingBtnAtras));
+        btnCerrarSesion .setForeground(btnSalirFont);
+        btnCerrarSesion .setBackground(Color.white);
 
-        btnAtras.addActionListener(e -> {
-            new VentanaPrincipal().setVisible(true);
-            dispose();
+        btnCerrarSesion .addActionListener(e -> {
+            try {
+                String url = "http://localhost:8080/";
+                if(rol.equals("CONDUCTOR")){
+                    url= url+ "drivers/logout/"+String.valueOf(idUsuario);
+                }else{
+                    url=url+"passengers/logout/"+String.valueOf(idUsuario);
+                };
+               
+                HttpClient client = HttpClient.newHttpClient();
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(url))
+                        .DELETE()
+                        .build();
+
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                if (response.statusCode() == 200) { 
+                    JOptionPane.showMessageDialog(this, "Cerrado sesión exitosamente.","Information", JOptionPane.INFORMATION_MESSAGE);
+                    new VentanaPrincipal().setVisible(true);
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Error al cerrar sesión", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                
+
+            } catch (Exception ex) {
+                // TODO: handle exception
+            }
         });
 
         add(panelAtras,BorderLayout.SOUTH);
-        panelAtras.add(btnAtras,BorderLayout.WEST);
+        panelAtras.add(btnCerrarSesion,BorderLayout.WEST);
     }
 }
