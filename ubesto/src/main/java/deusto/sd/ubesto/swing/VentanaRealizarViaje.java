@@ -1,8 +1,13 @@
 package deusto.sd.ubesto.swing;
 
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+import org.springframework.data.jpa.repository.query.Jpa21Utils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,33 +21,60 @@ import java.util.ArrayList;
 
 public class VentanaRealizarViaje extends JFrame {
     
+    final Color fondoClarito_verde = new Color(224, 250, 228);
+    final LineBorder btnNormalBorde = new LineBorder(new Color(47,158,68),2,true);
+    final Color btnNormalVerde =new Color(79,201,95); // Color verde estilo boceto: Color(100, 200, 100)
+    final Font fontBtnNormal = new Font("SansSerif", Font.BOLD, 12);
+    final Color btnSalirFont = new Color(47, 158, 68);
+    final LineBorder btnSalirBorde = new LineBorder(new Color(47,158,68),2,true);
+    final EmptyBorder paddingBtnAtras =  new EmptyBorder(5, 10, 5, 10);
+
     public VentanaRealizarViaje(Long idConductor, String email) {
         setTitle("Panel de Conducción");
-        setSize(345, 440);
+        setSize(345, 430);
         setLocationRelativeTo(null);
-        setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        JPanel pFondo= new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        add(pFondo);
+        pFondo.setBackground(fondoClarito_verde);
+        setBackground(fondoClarito_verde);
 
         String[] columnas = {"ID", "Origen", "Destino", "Precio"};
-        DefaultTableModel modeloTabla = new DefaultTableModel(columnas,0);
+        DefaultTableModel modeloTabla = new DefaultTableModel(columnas, 0);
         JTable tablaViajes = new JTable(modeloTabla);
         DefaultTableCellRenderer centro = new DefaultTableCellRenderer();
         JScrollPane scrollPane = new JScrollPane(tablaViajes);
         JButton btnActualizar = new JButton("Actualizar viajes");
         
-        actualizarDatosTabla(columnas, modeloTabla, tablaViajes,centro, scrollPane);
+        tablaViajes.setBackground(Color.white);
+        actualizarDatosTabla(columnas, modeloTabla, tablaViajes, centro, scrollPane);
 
-        add(scrollPane);
+        pFondo.add(scrollPane);
+        scrollPane.setBackground(fondoClarito_verde);
 
         JPanel panelDatos = new JPanel();
+        panelDatos.setBackground(fondoClarito_verde);
         panelDatos.setLayout(new BoxLayout(panelDatos, BoxLayout.Y_AXIS));
 
         JPanel panel1BtnActualizar = new JPanel();
-        JPanel panel2IDtexto_area = new JPanel();
-        JPanel panel3Botones = new JPanel();
-        JButton btnVolver = new JButton("Volver");
-        JButton btnAceptar = new JButton("ACEPTAR Y EMPEZAR");
+        panel1BtnActualizar.setBackground(fondoClarito_verde);
 
-        add(panelDatos);
+        JPanel panel2IDtexto_area = new JPanel();
+        panel2IDtexto_area.setBackground(fondoClarito_verde);
+        
+        JPanel panel3Botones = new JPanel();
+        panel3Botones.setBackground(fondoClarito_verde);
+        JButton btnVolver = new JButton("Volver");
+        btnVolver.setBackground(Color.white);
+        btnVolver.setForeground(btnSalirFont);
+        btnVolver.setBorder(new CompoundBorder(btnSalirBorde, paddingBtnAtras));
+        
+        JButton btnAceptar = new JButton("ACEPTAR Y EMPEZAR");
+        btnAceptar.setBackground(btnNormalVerde);
+        btnAceptar.setForeground(Color.white);
+        btnAceptar.setFont(fontBtnNormal);
+        btnAceptar.setBorder(new CompoundBorder(btnNormalBorde, paddingBtnAtras));
+
+        pFondo.add(panelDatos);
         panelDatos.add(panel1BtnActualizar);
         panelDatos.add(Box.createVerticalStrut(10));
         panelDatos.add(panel2IDtexto_area);
@@ -57,9 +89,8 @@ public class VentanaRealizarViaje extends JFrame {
         panel2IDtexto_area.add(txtTripId);
         
         panel3Botones.add(btnVolver);
-        panel3Botones. add(btnAceptar);
+        panel3Botones.add(btnAceptar);
         
-        btnAceptar.setBackground(new Color(100, 200, 100));
        
         // EVENTO: VOLVER
         btnVolver.addActionListener(e -> {
@@ -81,6 +112,8 @@ public class VentanaRealizarViaje extends JFrame {
 
                 if (res.statusCode() == 200) {
                     JOptionPane.showMessageDialog(this, "¡Viaje iniciado! La simulación está corriendo en el servidor.");
+                    actualizarDatosTabla(columnas, modeloTabla, tablaViajes,centro, scrollPane);
+
                 } else {
                     JOptionPane.showMessageDialog(this, "No se pudo aceptar el viaje: " + res.body());
                 }
@@ -149,7 +182,7 @@ public class VentanaRealizarViaje extends JFrame {
         for(int i=0; i<tablaViajes.getColumnCount(); i++){
             tablaViajes.getColumnModel().getColumn(i).setCellRenderer(centro);
         }
-        tablaViajes.setPreferredScrollableViewportSize(new Dimension(250,160));
+        tablaViajes.setPreferredScrollableViewportSize(new Dimension(260,160));
     }
 
     
