@@ -31,6 +31,7 @@ jobs:
       # Ejecutamos tests unitarios y generamos el reporte de JaCoCo que ya tienes
       - name: Run tests with JaCoCo
         run: mvn clean test jacoco:report
+        working-directory: ./ubesto
         # Si tu pom.xml está en una carpeta, añade: working-directory: ./ubesto
 
       # 4. TESTS DE RENDIMIENTO (Si usáis un perfil llamado 'performance')
