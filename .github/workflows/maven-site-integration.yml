@@ -30,7 +30,7 @@ jobs:
 
     # Paso C: Ejecución de la lógica de construcción y testing
     - name: Compilar y Ejecutar Tests con Maven
-      run: mvn clean test
+      run: mvn test
 
     # Paso D: Guardar resultados como artefactos de GitHub
     - name: Subir Reporte de Cobertura JaCoCo
