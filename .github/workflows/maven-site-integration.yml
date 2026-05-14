@@ -29,22 +29,27 @@ jobs:
 
       # 3. LANZAR TESTS (Aquí Spring levanta H2 solo)
       # Ejecutamos tests unitarios y generamos el reporte de JaCoCo que ya tienes
+        #  1- Cobertura (JaCoCo) + Tests Unitarios
       - name: Run tests with JaCoCo
         run: mvn clean test jacoco:report
         working-directory: ./ubesto
-        # Si tu pom.xml está en una carpeta, añade: working-directory: ./ubesto
+          # Si tu pom.xml está en una carpeta, añade: working-directory: ./ubesto
 
-      # 4. TESTS DE RENDIMIENTO (Si usáis un perfil llamado 'performance')
+        #  2- Tests de Rendimiento
       - name: Run performance tests
         run: mvn -Pperformance integration-test
         continue-on-error: true # Para que si falla el tiempo de respuesta, el pipeline siga
-
-      # 5. GENERAR SITE (Opcional, si queréis la web de Maven)
+      
+        #  3- Tests de Integración (Aceptación)
+      - name: Run Integration Tests
+        run: mvn test -Pintegration
+        
+      # 4. GENERAR SITE (Opcional, si queréis la web de Maven)
       - name: Generate Maven site
         run: mvn site
         working-directory: ./ubesto
 
-      # 6. DESPLEGAR REPORTES A GITHUB PAGES
+      # 5. DESPLEGAR REPORTES A GITHUB PAGES
       # Esto subirá vuestro reporte de cobertura a la web de vuestro repo
       - name: Deploy Reports to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
