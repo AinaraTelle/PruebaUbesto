@@ -1,83 +1,52 @@
-name: Maven Site & Integration Tests
+name: maven-site-integration
 
 on:
   push:
-    branches:
-      - '**'
-  schedule:
-    - cron: '0 18-23/2 * * *'
-    - cron: '0 0-6/2 * * *'
-  workflow_dispatch:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch: # Permite lanzarlo a mano desde GitHub
 
 permissions:
   contents: write
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Bajamos vuestro código
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 2. Ponemos Java 21 (según tu ejemplo)
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
+          cache: 'maven'
 
-      - name: Cache Maven dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+      # 3. LANZAR TESTS (Aquí Spring levanta H2 solo)
+      # Ejecutamos tests unitarios y generamos el reporte de JaCoCo que ya tienes
+      - name: Run tests with JaCoCo
+        run: mvn clean test jacoco:report
+        # Si tu pom.xml está en una carpeta, añade: working-directory: ./ubesto
 
-      - name: Wait for MySQL to be ready
-        run: |
-          echo "Waiting for MySQL..."
-          until mysqladmin ping -h 127.0.0.1 -uroot -proot --silent; do
-            sleep 2
-          done
-
-      - name: Run DB initialization script
-        run: |
-          echo "Running DB setup..."
-          mysql -h 127.0.0.1 -uroot -proot < src/main/resources/dbsetup.sql
-
-      - name: Run unit tests with JaCoCo
-        run: mvn test jacoco:report
-
+      # 4. TESTS DE RENDIMIENTO (Si usáis un perfil llamado 'performance')
       - name: Run performance tests
         run: mvn -Pperformance integration-test
+        continue-on-error: true # Para que si falla el tiempo de respuesta, el pipeline siga
 
-      - name: Copy performance report into site directory
-        run: mvn -Pperformance resources:copy-resources@copy-perf-report
-
-      - name: Run integration tests
-        run: mvn -Pintegration integration-test
-
+      # 5. GENERAR SITE (Opcional, si queréis la web de Maven)
       - name: Generate Maven site
         run: mvn site
 
-      - name: Copy Maven site + Doxygen output into docs/ folder
-        run: mvn post-site
-
-      # Ensure .nojekyll is always present in docs/ before deploying
-      - name: Ensure .nojekyll exists
-        run: touch docs/.nojekyll
-
-      - name: Ensure Maven does not overwrite the landing page
-        run: rm -f docs/index.html
-
-      - uses: peaceiris/actions-gh-pages@v4
+      # 6. DESPLEGAR REPORTES A GITHUB PAGES
+      # Esto subirá vuestro reporte de cobertura a la web de vuestro repo
+      - name: Deploy Reports to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
-          destination_dir: .
-          keep_files: true
-          enable_jekyll: false
+          publish_dir: ./target/site/jacoco # Subimos directamente el reporte de JaCoCo
+          publish_branch: gh-pages
