@@ -43,6 +43,7 @@ jobs:
         #  3- Tests de Integración (Aceptación)
       - name: Run Integration Tests
         run: mvn test -Pintegration
+        working-directory: ./ubesto
         
       # 4. GENERAR SITE (Opcional, si queréis la web de Maven)
       - name: Generate Maven site
