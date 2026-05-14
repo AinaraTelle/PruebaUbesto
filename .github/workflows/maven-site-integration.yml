@@ -42,6 +42,7 @@ jobs:
       # 5. GENERAR SITE (Opcional, si queréis la web de Maven)
       - name: Generate Maven site
         run: mvn site
+        working-directory: ./ubesto
 
       # 6. DESPLEGAR REPORTES A GITHUB PAGES
       # Esto subirá vuestro reporte de cobertura a la web de vuestro repo
